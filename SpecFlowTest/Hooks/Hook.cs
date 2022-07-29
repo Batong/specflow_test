@@ -1,21 +1,19 @@
-using System;
 using BoDi;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using SpecFlowTest.Drivers;
-using TechTalk.SpecFlow;
 
 namespace SpecFlowTest.Hooks
 {
     [Binding]
     public sealed class Hooks : DriverHelper
     {
-        private static DriverHelper driverHelper;
-        private readonly IObjectContainer container;
+        private static DriverHelper s_driverHelper;
+        private readonly IObjectContainer _container;
 
         public Hooks(ObjectContainer container)
         {
-            this.container = container;
+            _container = container;
         }
 
 
@@ -26,27 +24,27 @@ namespace SpecFlowTest.Hooks
             options.AddArgument("--ignore-ssl-errors=yes");
             options.AddArgument("--ignore-certificate-errors");
 
-            driverHelper = new DriverHelper();
-            driverHelper.Driver = new ChromeDriver(options);
-            driverHelper.Driver.Manage().Window.Maximize();
-            driverHelper.Driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(30);
+            s_driverHelper = new DriverHelper();
+            s_driverHelper.Driver = new ChromeDriver(options);
+            s_driverHelper.Driver.Manage().Window.Maximize();
+            s_driverHelper.Driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(30);
         }
 
         [BeforeScenario]
         public void SetUp()
         {
-            container.RegisterInstanceAs<IWebDriver>(driverHelper.Driver, "driver");
+            _container.RegisterInstanceAs<IWebDriver>(s_driverHelper.Driver, "driver");
         }
 
         [AfterFeature]
         public static void AfterFeature()
         {
-            if (driverHelper.Driver == null)
+            if (s_driverHelper.Driver == null)
                 return;
 
-            driverHelper.Driver.Close();
-            driverHelper.Driver.Dispose();
-            driverHelper.Driver = null;
+            s_driverHelper.Driver.Close();
+            s_driverHelper.Driver.Dispose();
+            s_driverHelper.Driver = null;
         }
     }
 }

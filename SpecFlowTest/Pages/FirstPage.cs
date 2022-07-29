@@ -1,6 +1,4 @@
 using OpenQA.Selenium;
-using OpenQA.Selenium.Chrome;
-using SpecFlowTest.Drivers;
 
 namespace SpecFlowTest.Pages
 {
@@ -8,12 +6,12 @@ namespace SpecFlowTest.Pages
     {
         private IWebDriver _driverHelper;
 
-        public FirstPage(IWebDriver driverHelper) =>_driverHelper = driverHelper;
+        public FirstPage(IWebDriver driverHelper) => _driverHelper = driverHelper;
 
-        public IWebElement logo => _driverHelper.FindElement(By.TagName("time"));
+        public IWebElement Logo => _driverHelper.FindElement(By.TagName("time"));
 
         public void GotoFirstPage() => _driverHelper.Navigate().GoToUrl("http://www.vecka.nu");
 
-        public bool IsWeekLogoDisplayed => logo.Displayed;
+        public bool IsWeekLogoDisplayed => Logo.Displayed;
     }
 }

@@ -2,9 +2,9 @@ using System.Globalization;
 
 namespace SpecFlowTest.Helpers;
 
-public interface Helper
+public static class Helper
 {
-    public static string getWeekOfYear()
+    public static string GetWeekOfYear()
     {
         Calendar cal = CultureInfo.InvariantCulture.Calendar;
         DayOfWeek day = cal.GetDayOfWeek(DateTime.Today);

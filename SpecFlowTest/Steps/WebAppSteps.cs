@@ -1,57 +1,53 @@
-using System.Globalization;
 using BoDi;
 using NUnit.Framework;
 using OpenQA.Selenium;
-using OpenQA.Selenium.Chrome;
 using SpecFlowTest.Pages;
 using SpecFlowTest.API;
-using SpecFlowTest.Drivers;
 using SpecFlowTest.Helpers;
-using TechTalk.SpecFlow.Infrastructure;
 
-namespace SpecFlowTest;
+namespace SpecFlowTest.Steps;
 
 [Binding]
-public class WebAppSteps : Helper
+public class WebAppSteps
 {
-    private readonly FirstPage firstPage;
-    private readonly ApplicationInterface api;
+    private readonly FirstPage _firstPage;
+    private readonly ApplicationInterface _api;
 
-    public WebAppSteps(ObjectContainer objectContainer) // use it as ctor parameter
+    public WebAppSteps(ObjectContainer objectContainer)
     {
-        firstPage = new FirstPage(objectContainer.Resolve<IWebDriver>("driver"));
-        api = new ApplicationInterface();
+        _firstPage = new FirstPage(objectContainer.Resolve<IWebDriver>("driver"));
+        _api = new ApplicationInterface();
     }
 
     [Given(@"I launch the web app url")]
-    public void WhenILaunchTheWebAppUrl()
+    public void GivenILaunchTheWebAppUrl()
     {
-        firstPage.GotoFirstPage();
+        _firstPage.GotoFirstPage();
     }
 
     [Then(@"web app should have launched properly")]
     public void ThenWebAppShouldHaveLaunchedProperly()
     {
-        Assert.True(firstPage.IsWeekLogoDisplayed);
-        Assert.AreEqual(firstPage.logo.Text, Helper.getWeekOfYear());
+        Assert.True(_firstPage.IsWeekLogoDisplayed);
+        Assert.AreEqual(_firstPage.Logo.Text, Helper.GetWeekOfYear());
     }
-    
+
     [Given(@"I add the ""(.*)"" URL with endpoint ""(.*)""")]
     public void GivenIAddTheUrlWithEndpoint(string url, string endpoint)
     {
-        api.BaseUrl = url;
-        api.Endpoint = endpoint;
+        _api.BaseUrl = url;
+        _api.Endpoint = endpoint;
     }
 
     [When(@"I execute the request")]
     public void WhenIExecuteTheRequest()
     {
-        api.ExecuteRequest();
+        _api.ExecuteRequest();
     }
 
     [Then(@"the correct ""(.*)"" response is returned")]
     public void ThenTheCorrectResponseIsReturned(string response)
     {
-        Assert.AreEqual(response.ToLower(), api.Response.StatusCode.ToString().ToLower());
+        Assert.AreEqual(response.ToLower(), _api.Response.StatusCode.ToString().ToLower());
     }
 }
